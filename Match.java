@@ -18,7 +18,9 @@ public class Match {
     }
 
     // Runs the complete four-round match
-    public void playMatch() {
+    public Player playMatch() {
+        firstPlayer.resetScore();
+        secondPlayer.resetScore();
 
         int currentTarget = Rules.initialTarget;
 
@@ -125,7 +127,7 @@ public class Match {
         }
 
         // Display the final match results
-        displayMatchWinner();
+        return displayMatchWinner();
     }
 
     // Handles one player's guess, card draw and round score
@@ -206,8 +208,9 @@ public class Match {
         return currentRound.getCardsRemaining();
     }
 
+    
     // Determines and displays the match winner
-    private void displayMatchWinner() {
+    private Player displayMatchWinner() {
 
         System.out.println();
         System.out.println("================================");
@@ -222,18 +225,23 @@ public class Match {
 
             System.out.println("Winner: "
                     + firstPlayer.getPlayerName());
+
+            return firstPlayer;
         }
         else if (secondPlayer.getTotalScore()
                 < firstPlayer.getTotalScore()) {
 
             System.out.println("Winner: "
                     + secondPlayer.getPlayerName());
+
+            return secondPlayer;
         }
         else {
 
             System.out.println("The match is a draw!");
-        }
 
-        System.out.println("================================");
+            return null;
+        }
     }
+
 }
