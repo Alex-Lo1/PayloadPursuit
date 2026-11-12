@@ -1,45 +1,32 @@
 
 public class Card {
 
-    private String rank;
-    private String suit;
+    private String cardName;
+    private int baseValue;
 
-    // Constructor used to initialise a playing card
-    public Card(String rank, String suit) {
-        this.rank = rank;
-        this.suit = suit;
+    // Constructor initialises the card's name and value
+    public Card(String cardName, int baseValue) {
+
+        this.cardName = cardName;
+        this.baseValue = baseValue;
     }
 
-    // Returns the number value of the card
-    public int getValue() {
+    // Returns the card's name
+    public String getCardName() {
 
-        if (rank.equals("Ace")) {
-            return 11;
-        }
-
-        if (rank.equals("Jack") ||
-            rank.equals("Queen") ||
-            rank.equals("King")) {
-
-            return 10;
-        }
-
-        return Integer.parseInt(rank);
+        return cardName;
     }
 
-    // Returns the rank of the card
-    public String getRank() {
-        return rank;
+    // Returns the card's base value
+    public int getBaseValue() {
+
+        return baseValue;
     }
 
-    // Returns the suit of the card
-    public String getSuit() {
-        return suit;
-    }
-
-    // Returns a readable representation of the card
+    // Returns the card details
     @Override
     public String toString() {
-        return rank + " of " + suit;
+
+        return cardName + " (Value: " + baseValue + ")";
     }
 }

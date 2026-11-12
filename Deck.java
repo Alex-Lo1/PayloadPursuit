@@ -28,7 +28,29 @@ public class Deck {
 
             for (String rank : ranks) {
 
-                cards[cardIndex] = new Card(rank, suit);
+                int cardValue;
+
+                // Assign numerical values to each card
+                if (rank.equals("Jack") ||
+                    rank.equals("Queen") ||
+                    rank.equals("King")) {
+
+                    cardValue = 10;
+                }
+                else if (rank.equals("Ace")) {
+
+                    cardValue = 11;
+                }
+                else {
+
+                    cardValue = Integer.parseInt(rank);
+                }
+
+                cards[cardIndex] = new Card(
+                    rank + " of " + suit,
+                    cardValue
+                );
+
                 cardIndex++;
             }
         }
@@ -38,7 +60,7 @@ public class Deck {
         shuffle();
     }
 
-    // Randomly rearranges the cards using the Fisher-Yates algorithm
+    // Randomly rearranges cards using Fisher-Yates
     public void shuffle() {
 
         Random randomGenerator = new Random();
@@ -69,8 +91,9 @@ public class Deck {
         return cards[cardsRemaining];
     }
 
-    // Returns the number of cards remaining in the deck
+    // Returns the number of cards remaining
     public int getCardsRemaining() {
+
         return cardsRemaining;
     }
 }
