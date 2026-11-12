@@ -1,0 +1,103 @@
+
+public class LeaderboardTest {
+
+    public static void main(String[] args) {
+
+        System.out.println("===== LEADERBOARD TESTS =====");
+
+        Leaderboard leaderboard = new Leaderboard();
+
+        // Test 1: Create players
+        System.out.println("\nTest 1: Creating players");
+
+        Player playerOne =
+                leaderboard.getOrCreatePlayer("Alex");
+
+        Player playerTwo =
+                leaderboard.getOrCreatePlayer("James");
+
+        if (playerOne != null && playerTwo != null) {
+            System.out.println("PASS: Players created successfully.");
+        }
+        else {
+            System.out.println("FAIL: Players could not be created.");
+        }
+
+        // Test 2: Find an existing player
+        System.out.println("\nTest 2: Finding an existing player");
+
+        Player foundPlayer = leaderboard.findPlayer("Alex");
+
+        if (foundPlayer == playerOne) {
+            System.out.println("PASS: Player found successfully.");
+        }
+        else {
+            System.out.println("FAIL: Player was not found.");
+        }
+
+        // Test 3: Find a player that does not exist
+        System.out.println("\nTest 3: Searching for missing player");
+
+        Player missingPlayer = leaderboard.findPlayer("Unknown");
+
+        if (missingPlayer == null) {
+            System.out.println("PASS: Missing player handled correctly.");
+        }
+        else {
+            System.out.println("FAIL: Unexpected player found.");
+        }
+
+        // Test 4: Record a match won by Alex
+        System.out.println("\nTest 4: Recording a match result");
+
+        leaderboard.recordMatch(playerOne, playerTwo, playerOne);
+
+        if (playerOne.getMatchesPlayed() == 1 &&
+            playerTwo.getMatchesPlayed() == 1 &&
+            playerOne.getMatchesWon() == 1) {
+
+            System.out.println("PASS: Match result recorded correctly.");
+        }
+        else {
+            System.out.println("FAIL: Match result incorrect.");
+        }
+
+        // Test 5: Record a draw
+        System.out.println("\nTest 5: Recording a draw");
+
+        leaderboard.recordMatch(playerOne, playerTwo, null);
+
+        if (playerOne.getMatchesPlayed() == 2 &&
+            playerTwo.getMatchesPlayed() == 2 &&
+            playerOne.getMatchesWon() == 1 &&
+            playerTwo.getMatchesWon() == 0) {
+
+            System.out.println("PASS: Draw recorded correctly.");
+        }
+        else {
+            System.out.println("FAIL: Draw recorded incorrectly.");
+        }
+
+        // Test 6: Display leaderboard
+        System.out.println("\nTest 6: Displaying leaderboard");
+
+        leaderboard.displayLeaderboard();
+
+        // Test 7: Display player history
+        System.out.println("\nTest 7: Displaying player history");
+
+        leaderboard.displayPlayerHistory("Alex");
+
+        // Test 8: Compare players
+        System.out.println("\nTest 8: Comparing players");
+
+        leaderboard.comparePlayers("Alex", "James");
+
+        // Test 9: Display players with more than zero wins
+        System.out.println("\nTest 9: Filtering players by wins");
+
+        leaderboard.displayPlayersWithMoreThanWins(0);
+
+        System.out.println("\n===== LEADERBOARD TESTS COMPLETED =====");
+    }
+}
