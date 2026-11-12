@@ -17,48 +17,47 @@ public class Round {
         return deck.drawCard();
     }
 
-    // Calculates the best possible total for a player's cards
-    public int calculateBestTotal(Card[] playerCards, int numberOfCards) {
+    
+public int calculateBestTotal(Card[] playerCards, int numberOfCards) {
 
-        int total = 0;
-        int numberOfAces = 0;
+    int total = 0;
+    int numberOfAces = 0;
 
-        // Calculate the total using Ace as 11 initially
-        for (int cardIndex = 0; cardIndex < numberOfCards; cardIndex++) {
+    // Calculate the total with every Ace initially worth 11
+    for (int cardIndex = 0; cardIndex < numberOfCards; cardIndex++) {
 
-            Card currentCard = playerCards[cardIndex];
+        Card currentCard = playerCards[cardIndex];
 
-            total = total + currentCard.getBaseValue();
+        total = total + currentCard.getBaseValue();
 
-            // Count the number of Aces
-            if (currentCard.getCardName().startsWith("Ace")) {
-                numberOfAces++;
-            }
+        if (currentCard.getCardName().startsWith("Ace")) {
+            numberOfAces++;
         }
-
-        // Try changing Aces from 11 to 1
-        // if this produces a better score
-        while (numberOfAces > 0) {
-
-            int currentScore = calculateScore(total);
-
-            int reducedTotal = total - 10;
-
-            int reducedScore = calculateScore(reducedTotal);
-
-            if (reducedScore < currentScore) {
-
-                total = reducedTotal;
-                numberOfAces--;
-            }
-            else {
-
-                break;
-            }
-        }
-
-        return total;
     }
+
+    // Reduce an Ace from 11 to 1 if it gets closer to the target
+    while (numberOfAces > 0) {
+
+        int currentDifference = Math.abs(target - total);
+
+        int reducedTotal = total - 10;
+
+        int reducedDifference = Math.abs(target - reducedTotal);
+
+        if (reducedDifference < currentDifference) {
+
+            total = reducedTotal;
+            numberOfAces--;
+        }
+        else {
+
+            break;
+        }
+    }
+
+    return total;
+}
+
 
     // Calculates the score based on the target
     public int calculateScore(int total) {
@@ -107,4 +106,12 @@ public class Round {
 
         return target;
     }
+
+
+    // Returns the number of cards remaining in the deck
+    public int getCardsRemaining() {
+
+        return deck.getCardsRemaining();
+    }
+
 }
