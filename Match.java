@@ -7,14 +7,27 @@ public class Match {
     private Player firstPlayer;
     private Player secondPlayer;
     private Scanner keyboard;
+    private boolean automated;
+    private boolean automatedFirstTurn;
+    private int automatedFirstGuess;
+    private Random botRandomGenerator = new Random();
 
     // Constructor sets up the two players
+    // Constructor for normal human matches
     public Match(Player firstPlayer, Player secondPlayer,
-                 Scanner keyboard) {
+                Scanner keyboard) {
+
+        this(firstPlayer, secondPlayer, keyboard, false);
+    }
+
+    // Constructor for human or automated matches
+    public Match(Player firstPlayer, Player secondPlayer,
+                Scanner keyboard, boolean automated) {
 
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.keyboard = keyboard;
+        this.automated = automated;
     }
 
     // Runs the complete four-round match
@@ -41,6 +54,8 @@ public class Match {
         for (int roundNumber = 1;
              roundNumber <= Rules.numberOfRounds;
              roundNumber++) {
+
+            automatedFirstTurn = true;
 
             System.out.println();
             System.out.println("================================");
@@ -130,32 +145,68 @@ public class Match {
         return displayMatchWinner();
     }
 
+    
     // Handles one player's guess, card draw and round score
-    private int playPlayerTurn(Player player, Round currentRound, int maximumGuess) {
+    private int playPlayerTurn(Player player, Round currentRound,
+                               int maximumGuess) {
+
         System.out.println();
         System.out.println(player.getPlayerName() + "'s turn.");
 
         System.out.println("Cards remaining in deck: "
-        + currentRound.getCardsRemaining());
+                + currentRound.getCardsRemaining());
 
-        int cardGuess = getValidGuess(maximumGuess);
+        int cardGuess;
+
+        if (automated) {
+
+            if (automatedFirstTurn) {
+
+                // First bot guesses randomly between 3 and 7
+                automatedFirstGuess =
+                        botRandomGenerator.nextInt(
+                            Rules.maximumBotGuess
+                            - Rules.minimumBotGuess + 1
+                        ) + Rules.minimumBotGuess;
+
+                cardGuess = automatedFirstGuess;
+
+                automatedFirstTurn = false;
+            }
+            else {
+
+                // Second bot guesses one more card
+                cardGuess = automatedFirstGuess
+                        + Rules.secondPlayerGuessOffset;
+            }
+
+            // Ensure the guess does not exceed available cards
+            if (cardGuess > maximumGuess) {
+                cardGuess = maximumGuess;
+            }
+
+            System.out.println(player.getPlayerName()
+                    + " guesses " + cardGuess + " cards.");
+
+        }
+        else {
+
+            cardGuess = getValidGuess(maximumGuess);
+        }
 
         Card[] playerCards = new Card[cardGuess];
 
-        // Draw the number of cards guessed
         for (int cardIndex = 0; cardIndex < cardGuess; cardIndex++) {
 
             playerCards[cardIndex] = currentRound.drawCard();
         }
 
-        // Calculate the best total and round score
         int bestTotal = currentRound.calculateBestTotal(
             playerCards, cardGuess
         );
 
         int roundScore = currentRound.calculateScore(bestTotal);
 
-        // Display the player's cards
         System.out.println();
         System.out.println(player.getPlayerName() + "'s cards:");
 
@@ -167,11 +218,11 @@ public class Match {
         System.out.println("Card total: " + bestTotal);
         System.out.println("Round score: " + roundScore);
 
-        // Add the round score to the player's cumulative score
         player.addScore(roundScore);
 
         return bestTotal;
     }
+
 
     // Gets a valid card guess from the player
     private int getValidGuess(int maximumGuess) {
@@ -202,13 +253,6 @@ public class Match {
         return cardGuess;
     }
 
-    // Returns how many cards remain in the current deck
-    private int getCardsRemaining(Round currentRound) {
-
-        return currentRound.getCardsRemaining();
-    }
-
-    
     // Determines and displays the match winner
     private Player displayMatchWinner() {
 

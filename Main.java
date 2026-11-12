@@ -41,9 +41,27 @@ public class Main {
                         break;
 
                     case 3:
-                        System.out.println(
-                            "Simulations will be implemented in Stage 7."
-                        );
+
+                        System.out.print("How many matches would you like to simulate? ");
+
+                        if (keyboard.hasNextInt()) {
+
+                            int numberOfMatches = keyboard.nextInt();
+                            keyboard.nextLine();
+
+                            Simulation simulation = new Simulation(
+                                leaderboard,
+                                keyboard
+                            );
+
+                            simulation.runSimulation(numberOfMatches);
+                        }
+                        else {
+
+                            System.out.println("Please enter a valid number.");
+                            keyboard.nextLine();
+                        }
+
                         break;
 
                     case 4:
