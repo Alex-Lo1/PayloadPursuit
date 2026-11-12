@@ -1,12 +1,6 @@
 
 public class Main {
 
-    /*
-     * COM498 - Algorithms and Data Structures
-     * Assignment 2 - Payload Pursuit
-     * Student Variant B
-     */
-
     public static void main(String[] args) {
 
         displayWelcomeMessage();
